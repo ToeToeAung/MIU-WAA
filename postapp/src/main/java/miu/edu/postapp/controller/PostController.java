@@ -6,19 +6,16 @@ import miu.edu.postapp.service.PostService;
 import miu.edu.postapp.entity.dto.PostDetailDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.context.annotation.Bean;
-//import org.springframework.hateoas.EntityModel;
-//import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/posts")
 @CrossOrigin(origins = {"*"})
+
 public class PostController {
 
     private final PostService postService;
@@ -28,33 +25,31 @@ public class PostController {
         this.postService = postService;
     }
 
-    @ResponseStatus(HttpStatus.OK)
-    @GetMapping
-    public List<PostDto> getAll() {
-        return postService.findAll();
-    }
-
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public void save(@RequestBody PostDto p) {
         postService.save(p);
     }
 
+    @GetMapping
+    public List<Post> getAll() {
+        return postService.findAll();
+    }
+
     @GetMapping("/{id}")
-    public ResponseEntity<PostDto> getById(@PathVariable int id) {
-        var post = postService.getById(id);
-        return ResponseEntity.ok(post);
+    public ResponseEntity<Post> getById(@PathVariable long id) {
+        var product = postService.getById(id);
+        return ResponseEntity.ok(product);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable int id) {
+    public void delete(@PathVariable long id) {
         postService.delete(id);
     }
 
-    @PutMapping("/{id}")
-    public void update(@PathVariable("id") int postId, @RequestBody PostDto p) {
-        postService.update(postId,p);
-    }
-
+//    @PutMapping("/{id}")
+//    public void update(@PathVariable("id") long postId, @RequestBody PostDto p) {
+//        postService.update(postId,p);
+//    }
 }

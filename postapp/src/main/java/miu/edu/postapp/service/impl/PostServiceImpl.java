@@ -1,51 +1,64 @@
 package miu.edu.postapp.service.impl;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import miu.edu.postapp.entity.Post;
 import miu.edu.postapp.entity.dto.PostDto;
-import miu.edu.postapp.entity.dto.PostDetailDto;
-import miu.edu.postapp.helper.ListMapper;
 import miu.edu.postapp.repo.PostRepo;
 import miu.edu.postapp.service.PostService;
 
-
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
-import java.util.List;
+import org.springframework.transaction.annotation.Transactional;
+import jakarta.persistence.*;
 
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class PostServiceImpl implements PostService {
-
+    @Autowired
     private final PostRepo postRepo;
 
-    @Autowired
-    ModelMapper modelMapper;
+    @PersistenceContext
+    EntityManager entityManager;
 
-    @Autowired
-    ListMapper listMapper;
-
-    public List<PostDto> findAll() {
-        return (List<PostDto>) listMapper.mapList(postRepo.findAll(),new PostDto());}
-
-
-    public PostDto getById(int id) {
-        return modelMapper.map(postRepo.getById(id), PostDto.class);
-    }
-    @Override
-    public void save(PostDto p) {
-        postRepo.save(modelMapper.map(p, Post.class));
-    }
 
     @Override
-    public void delete(int id) {
-        postRepo.delete(id);
+    public void save(PostDto dto){
+        Post p = new Post();
+        p.setTitle(dto.getTitle());
+        p.setContent(dto.getContent());
+        p.setAuthor(dto.getAuthor());
+        postRepo.save(p);
+    }
+
+   @Override
+    public void delete(long id) {
+       postRepo.deleteById(id);
+   }
+
+    @Override
+    public Post getById(long id) {
+        return postRepo.findById(id).get();
     }
 
     @Override
-    public void update(int id,  PostDto p) {
-        postRepo.update(id, modelMapper.map(p, Post.class));
+    public List<Post> findAll() {
+        Iterable<Post> iterable = postRepo.findAll();
+        List<Post> list = Streamable.of(iterable).toList();
+        return list;
     }
+
+//    @Override
+//    public void update(long id,  PostDto dto) {
+//        Post existingPost = postRepo.findById(id).orElseThrow(() -> new RuntimeException("Post not found"));
+//        existingPost.setTitle(dto.getTitle());
+//        existingPost.setContent(dto.getContent());
+//        existingPost.setAuthor(dto.getAuthor());
+//        postRepo.save(existingPost);
+//    }
 }
