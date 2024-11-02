@@ -1,4 +1,5 @@
 package miu.edu.postapp.controller;
+import miu.edu.postapp.entity.Comment;
 import miu.edu.postapp.entity.Post;
 import miu.edu.postapp.entity.dto.PostDetailDto;
 import miu.edu.postapp.entity.dto.PostDto;
@@ -46,6 +47,18 @@ public class PostController {
     @DeleteMapping("/{id}")
     public void delete(@PathVariable long id) {
         postService.delete(id);
+    }
+
+    @PostMapping("/{id}/comments")
+    public ResponseEntity<Comment> addComment(@PathVariable Long id, @RequestBody Comment comment) {
+        Comment createdComment = postService.addCommentToPost(id, comment);
+        return ResponseEntity.ok(createdComment);
+    }
+
+    @GetMapping("/{id}/comments")
+    public ResponseEntity<List<Comment>> getCommentsByPostId(@PathVariable Long id) {
+        List<Comment> comments = postService.findCommentsByPostId(id);
+        return ResponseEntity.ok(comments);
     }
 
 //    @PutMapping("/{id}")

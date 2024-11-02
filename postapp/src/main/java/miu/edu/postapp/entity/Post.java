@@ -3,9 +3,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -37,4 +35,11 @@ public class Post {
     public Long getId() {
         return id;
     }
+
+    @Getter
+    @Setter
+    @OneToMany
+    @JoinColumn(name = "post_id")
+    private List<Comment> comments;
+
 }

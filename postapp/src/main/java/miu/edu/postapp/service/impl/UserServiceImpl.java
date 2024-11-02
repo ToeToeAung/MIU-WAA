@@ -1,8 +1,11 @@
 package miu.edu.postapp.service.impl;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import miu.edu.postapp.entity.Comment;
+import miu.edu.postapp.entity.Post;
 import miu.edu.postapp.entity.User;
 import miu.edu.postapp.entity.dto.UserDto;
+import miu.edu.postapp.repo.PostRepo;
 import miu.edu.postapp.repo.UserRepo;
 import miu.edu.postapp.service.UserService;
 
@@ -14,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import jakarta.persistence.*;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -23,6 +27,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private final UserRepo userRepo;
 
+    @Autowired
+    private final PostRepo postRepo;
     @PersistenceContext
     EntityManager entityManager;
 
@@ -52,5 +58,14 @@ public class UserServiceImpl implements UserService {
         return list;
     }
 
-
+    public User addPostToUser(Long userId, Post post) {
+        User user = getById(userId);
+        if (user.getPosts() == null) {
+            user.setPosts(new ArrayList<>());
+        }
+        //post.setUser(user);
+        user.getPosts().add(post);
+        postRepo.save(post);
+        return userRepo.save(user);
+    }
 }

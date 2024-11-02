@@ -1,4 +1,6 @@
 package miu.edu.postapp.controller;
+import miu.edu.postapp.entity.Comment;
+import miu.edu.postapp.entity.Post;
 import miu.edu.postapp.entity.User;
 import miu.edu.postapp.entity.dto.PostDetailDto;
 import miu.edu.postapp.entity.dto.UserDto;
@@ -48,4 +50,10 @@ public class UserController {
         userService.delete(id);
     }
 
+
+    @PostMapping("/{id}/posts")
+    public ResponseEntity<User> addPostToUser(@PathVariable Long id, @RequestBody Post post) {
+        User updatedUser = userService.addPostToUser(id, post);
+        return ResponseEntity.ok(updatedUser);
+    }
 }

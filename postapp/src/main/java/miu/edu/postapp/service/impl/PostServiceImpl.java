@@ -1,8 +1,10 @@
 package miu.edu.postapp.service.impl;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import miu.edu.postapp.entity.Comment;
 import miu.edu.postapp.entity.Post;
 import miu.edu.postapp.entity.dto.PostDto;
+import miu.edu.postapp.repo.CommentRepo;
 import miu.edu.postapp.repo.PostRepo;
 import miu.edu.postapp.service.PostService;
 
@@ -15,6 +17,7 @@ import jakarta.persistence.*;
 
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +25,9 @@ import java.util.List;
 public class PostServiceImpl implements PostService {
     @Autowired
     private final PostRepo postRepo;
+
+    @Autowired
+    private final CommentRepo commentRepo;
 
     @PersistenceContext
     EntityManager entityManager;
@@ -51,6 +57,17 @@ public class PostServiceImpl implements PostService {
         Iterable<Post> iterable = postRepo.findAll();
         List<Post> list = Streamable.of(iterable).toList();
         return list;
+    }
+
+    public Comment addCommentToPost(Long postId, Comment comment) {
+        Post postComment = postRepo.findById(postId).orElse(null);
+        comment.setPost(postComment);
+        return commentRepo.save(comment);
+    }
+
+    public List<Comment> findCommentsByPostId(Long postId) {
+        Post post = postRepo.findById(postId).orElse(null);
+        return post.getComments();
     }
 
 //    @Override
