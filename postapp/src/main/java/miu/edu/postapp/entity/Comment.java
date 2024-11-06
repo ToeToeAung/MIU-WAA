@@ -20,7 +20,7 @@ public class Comment {
     private String name;
     @Setter
     @ManyToOne
-    @JsonBackReference // Prevents infinite recursion in JSON serialization
+    @JsonBackReference
     private Post post;
     public void setId(Long id) {
         this.id = id;
