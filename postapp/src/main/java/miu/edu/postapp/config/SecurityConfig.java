@@ -30,13 +30,15 @@ import java.util.List;
 @Configuration
 @EnableWebSecurity
 //@RequiredArgsConstructor
-public class SecurityConfig {
+public class SecurityConfig{
     private final JwtFilter jwtFilter;
     @Autowired
     private CustomUserDetailsService userDetailsService;
+
     public SecurityConfig(JwtFilter jwtFilter) {
         this.jwtFilter = jwtFilter;
     }
+
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -69,6 +71,7 @@ public class SecurityConfig {
         return authConfig.getAuthenticationManager();
     }
 
+
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
@@ -77,11 +80,4 @@ public class SecurityConfig {
         return authProvider;
     }
 
-//    @Bean
-//    public DaoAuthenticationProvider authenticationProvider(UserDetailsService userDetailsService) {
-//        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-//        authProvider.setUserDetailsService(userDetailsService);
-//        authProvider.setPasswordEncoder(passwordEncoder());
-//        return authProvider;
-//    }
 }

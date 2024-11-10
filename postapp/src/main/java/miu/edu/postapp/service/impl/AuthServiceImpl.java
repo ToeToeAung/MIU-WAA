@@ -36,14 +36,17 @@ public class AuthServiceImpl implements AuthService {
         try {
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
             String rawPassword = "password"; // This is the password you’re testing
-            String storedHash = "$2a$10$7EqJtq98hPqEX7fNZaFWoOq5i6wZh0gZs8B/5LnklXfFw1VxnQ4uK"; // Replace with actual hash from the database
-
+            //String storedHash = "$2a$10$7EqJtq98hPqEX7fNZaFWoOq5i6wZh0gZs8B/5LnklXfFw1VxnQ4uK"; // Replace with actual hash from the database
+            String storedHash ="$2a$10$vyrme2l/48ewLVL6CNvuRO0PKcs7SURhc9Dt6MxnPsQyzmX2BP0l6";
+              //      encoder.encode(rawPassword);
+            loggerService.logOperation("Stored Hash Code : " + storedHash);
             boolean matches = encoder.matches(rawPassword, storedHash);
             loggerService.logOperation("Password matches: " + matches);
 
             result = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
             );
+            loggerService.logOperation("result " +result.getName() + result);
             loggerService.logOperation("Login attempt successful for " + loginRequest.getUsername());
 
         } catch (BadCredentialsException e) {

@@ -96,6 +96,11 @@
 			<artifactId>spring-boot-starter-security</artifactId>
 			<version>3.0.1</version>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+			<version>6.3.4</version> <!-- Last version before deprecation -->
+		</dependency>
     </dependencies>
 
 	<build>
