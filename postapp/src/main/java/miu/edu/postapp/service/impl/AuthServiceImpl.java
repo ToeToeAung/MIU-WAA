@@ -46,7 +46,7 @@ public class AuthServiceImpl implements AuthService {
             result = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
             );
-            loggerService.logOperation("result " +result.getName() + result);
+            loggerService.logOperation("result " +result.getName());
             loggerService.logOperation("Login attempt successful for " + loginRequest.getUsername());
 
         } catch (BadCredentialsException e) {
@@ -57,13 +57,16 @@ public class AuthServiceImpl implements AuthService {
         loggerService.logOperation("Result " + result.getName());
         final UserDetails userDetails = userDetailsService.loadUserByUsername(result.getName());
         loggerService.logOperation("userDetails " + userDetails.getUsername() +userDetails.getPassword() );
+
         final String accessToken = jwtUtil.generateToken(userDetails);
         System.out.println("Access Token " +accessToken);
+
         loggerService.logOperation("**Access Token " +accessToken);
         final String refreshToken = jwtUtil.generateRefreshToken(loginRequest.getUsername());
         var loginResponse = new LoginResponse(accessToken, refreshToken);
+
         System.out.println("Login Response" +loginResponse);
-        loggerService.logOperation("Login Response" +loginResponse);
+        //loggerService.logOperation("Login Response" +loginResponse);
         return loginResponse;
     }
 

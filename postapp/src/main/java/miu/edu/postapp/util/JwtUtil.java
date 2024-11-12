@@ -20,6 +20,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -33,8 +34,9 @@ public class JwtUtil extends OncePerRequestFilter{
     public void setUserDetailsService(@Lazy UserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
     }
-
-    private final String secret = "top-secret";
+  //  private final String secret = Base64.getEncoder().encodeToString("top-secret".getBytes(StandardCharsets.UTF_8));
+   // private final String secret = "top-secret";
+    private final String secret ="S3vR8aQ9qZ3tZaVQsYX0hc5I0Wds6K8xlBv7sZB/TJz9NCY+qNXnAz8sOm1DQ/TWjbs2UpfMi3BW9yTbJGv9gA==";
     private final long expiration = 5 * 60 * 60 * 60;
     private final long refreshExpiration = 5 * 60 * 60 * 60 * 60;
 
